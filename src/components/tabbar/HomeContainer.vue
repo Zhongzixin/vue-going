@@ -1,5 +1,6 @@
 <template>
   <div>
+    <!-- 轮播图 -->
     <mt-swipe :auto="4000">
       <!-- 在组件中使用v-for一定要使用key -->
       <!-- <mt-swipe-item v-for="item in lunbotuList" :key="item.id">
@@ -19,10 +20,10 @@
         </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-        <a href="#">
+        <router-link to="/home/photolist">
           <img src="../../images/menu2.png" alt="">
           <div class="mui-media-body">图片分享</div>
-        </a>
+        </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">
@@ -31,10 +32,10 @@
         </a>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
-        <a href="#">
+        <router-link to="/home/goodslist">
           <img src="../../images/menu4.png" alt="">
           <div class="mui-media-body">商品购买</div>
-        </a>
+        </router-link>
       </li>
       <li class="mui-table-view-cell mui-media mui-col-xs-4 mui-col-sm-3">
         <a href="#">
@@ -63,9 +64,9 @@ export default {
       lunbotuList:[]
     };
   },
-  created() {
-    this.getLunbotu();
-  },
+  // created() {
+  //   this.getLunbotu();
+  // },
   methods: {
     // getLunbotu() {
     //   //获取数据

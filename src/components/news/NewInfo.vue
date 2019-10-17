@@ -8,7 +8,7 @@
 
     <hr />
     <div class="content" v-html="newsinfo.content"></div>
-    <component-box :id="this.id"></component-box>
+    <component-box :id="id"></component-box>
   </div>
 </template>
 
