@@ -1,5 +1,111 @@
 //入口文件
 import Vue from 'vue'
+
+// 配置vue-x
+// 导入包
+import Vuex from 'vuex'
+// 注册Vuex到Vue中
+Vue.use(Vuex)
+// new Vuex.Store()实例，得到一个仓储对象
+
+//每次进入网站，肯定会调用main.js，在调用时候，把本地存储中，把购物车数据读出来，
+// 放在store中
+var car = JSON.parse(localStorage.getItem('car') || '[]')
+var store = new Vuex.Store({
+  state: {
+    car: car
+  },
+  mutations: {
+    addToCar(state, goodsinfo) {
+      //假设没有找到对应的商品
+      var flag = false;
+
+      state.car.some(item => {
+        if (item.id == goodsinfo.id) {
+          item.count += parseInt(goodsinfo.count)
+          flag = true
+          //return true是来结束some循环
+          return true
+        }
+      })
+      //最终循环完毕得到的flag 还是 false，则push到购物车中
+      if (!flag) {
+        state.car.push(goodsinfo)
+      }
+      //当car更新之后，把car数组，储存到本地localstorage中
+      localStorage.setItem('car', JSON.stringify(state.car))
+    },
+    updateCar(state, goodsinfo) {
+      state.car.some(item => {
+        if (item.id == goodsinfo.id) {
+          item.count = parseInt(goodsinfo.count);
+          return true;
+        }
+      })
+      localStorage.setItem('car', JSON.stringify(state.car))
+
+    },
+    removeFromCar(state, id) {
+      state.car.some((item, i) => {
+        if (item.id == id) {
+          state.car.splice(i, 1)
+          return true;
+        }
+      })
+      localStorage.setItem('car', JSON.stringify(state.car))
+    },
+    selectedChanged(state, info) {
+      state.car.some(item => {
+        if (item.id == info.id) {
+          item.selected = info.selected;
+          return true
+        }
+      })
+      localStorage.setItem('car', JSON.stringify(state.car))
+    }
+  },
+  getters: {
+    getAllCount(state) {
+      var c = 0;
+      state.car.forEach(item => {
+        c += item.count
+      })
+      return c
+    },
+    getGoodsCount(state) {
+      var o = {};
+      state.car.forEach(item => {
+        o[item.id] = item.count
+      })
+      return o;
+    },
+    getSelected(state) {
+      var o = {};
+      state.car.forEach(item => {
+        o[item.id] = item.selected;
+      })
+      return o
+    },
+    getGoodsCountAndMoney(state) {
+      var o = {
+        count: 0,
+        money: 0
+      }
+      state.car.forEach(item => {
+        if (item.selected) {
+          o.count += item.count;
+          o.money += item.count * item.price
+        }
+      })
+      return o
+    }
+  }
+})
+
+
+
+
+
 //导入路由的包
 import VueRouter from 'vue-router'
 Vue.use(VueRouter)
@@ -58,5 +164,6 @@ import app from './App.vue'
 var vm = new Vue({
   el: '#app',
   render: c => c(app),
-  router
+  router,
+  store
 })
